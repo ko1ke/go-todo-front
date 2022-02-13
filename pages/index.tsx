@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import useSWR from 'swr';
-import { Todo } from '../typing/Todo';
+import { Todo } from '../types/Todo';
 
 const fetcher = (url: string) =>
   fetch(url).then((res) => res.json() as Promise<Todo[]>);
