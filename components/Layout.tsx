@@ -12,12 +12,12 @@ const Layout: React.FC<Props> = ({ children }) => {
         <a>top page</a>
       </Link>
       <span> | </span>
-      <Link href="/signup">
-        <a>signup</a>
+      <Link href="/sign_up">
+        <a>sign up</a>
       </Link>
       <span> | </span>
-      <Link href="/signin">
-        <a>signin</a>
+      <Link href="/sign_in">
+        <a>sign in</a>
       </Link>
       {children}
     </div>
