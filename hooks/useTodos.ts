@@ -50,7 +50,40 @@ const useTodos = () => {
     f();
   }, [todoItem]);
 
-  return { todos, error, todoItem, handleTodoItemChange, submitTodo };
+  const deleteTodo = useCallback(
+    (id: number) => {
+      const f = async () => {
+        const method = 'DELETE';
+        const accessToken = localStorage.getItem('accessToken');
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        };
+
+        const res = await fetch(`http://localhost:4000/todos/${id}`, {
+          method,
+          headers,
+        });
+
+        if (res.status === 200 && todos) {
+          const j = (await res.json()) as Todo;
+          mutate([...todos.filter((t) => t.id !== j.id)]);
+        }
+      };
+
+      f();
+    },
+    [todoItem]
+  );
+
+  return {
+    todos,
+    error,
+    todoItem,
+    handleTodoItemChange,
+    submitTodo,
+    deleteTodo,
+  };
 };
 
 export default useTodos;
