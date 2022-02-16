@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <>
@@ -23,6 +23,8 @@ const Layout: React.FC<Props> = ({ children }) => {
         <Link href="/sign_in">
           <a>sign in</a>
         </Link>
+        <span> | </span>
+        <button onClick={signOut}>sign out</button>
       </div>
       <p>{user.id > 0 && `ID: ${user.id} |  Name: ${user.username}`}</p>
       <hr />
