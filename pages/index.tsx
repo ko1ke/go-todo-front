@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
-import useSWR from 'swr';
 import { useAuth } from '../hooks/useAuth';
+import useTodos from '../hooks/useTodos';
 import { Todo } from '../types/Todo';
 
 const fetcher = (url: string) =>
@@ -8,7 +8,7 @@ const fetcher = (url: string) =>
 
 const Todos: NextPage = () => {
   const { user } = useAuth();
-  const { data, error } = useSWR('http://localhost:4000/todos', fetcher);
+  const { data, error } = useTodos();
 
   if (error) return <p>An error has occurred.</p>;
   if (!data) return <p>Loading...</p>;
@@ -26,6 +26,7 @@ const Todos: NextPage = () => {
           </div>
         );
       })}
+      
     </div>
   );
 };
