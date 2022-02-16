@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { User } from '../types/User';
 
 export const useAuth = () => {
@@ -6,6 +6,7 @@ export const useAuth = () => {
     id: 0,
     username: '',
   });
+  const authDoneRef = useRef(false);
 
   const postAuthUser = async (accessToken: string) => {
     const method = 'POST';
@@ -59,10 +60,11 @@ export const useAuth = () => {
           setUser({ id, username });
         }
       }
+      authDoneRef.current = true;
     };
 
     f();
   }, []);
 
-  return { user };
+  return { user, authDoneRef };
 };

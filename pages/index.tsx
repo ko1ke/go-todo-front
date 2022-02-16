@@ -15,9 +15,6 @@ const Todos: NextPage = () => {
 
   return (
     <div>
-      <p>{user.id > 0 && `ID: ${user.id} |  Name: ${user.username}`}</p>
-      <hr />
-
       {data.map((todo) => {
         return (
           <div>
