@@ -9,7 +9,7 @@ type Props = {
 const Auth: React.FC<Props> = ({ children }) => {
   const { user, authDoneRef } = useAuth();
   const router = useRouter();
-  const pathsNotRequireAuth = ['/'];
+  const pathsNotRequireAuth = ['/', '/sign_up', '/sign_in'];
   const requireAuth = !pathsNotRequireAuth.includes(router.pathname);
 
   useEffect(() => {
