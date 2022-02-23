@@ -1,7 +1,12 @@
 import { useCallback, useState, ChangeEvent } from 'react';
+import type { SignUpItem } from '../types/Auth';
+import { useDispatch } from 'react-redux';
+import { signUp } from '../slices/auth';
 
 const useSignUp = () => {
-  const [signUpItem, setSignupItem] = useState({
+  const dispatch = useDispatch();
+
+  const [signUpItem, setSignupItem] = useState<SignUpItem>({
     username: '',
     password: '',
     email: '',
@@ -16,24 +21,8 @@ const useSignUp = () => {
   );
 
   const submitSignUp = useCallback(() => {
-    const f = async () => {
-      const method = 'POST';
-      const headers = {
-        'Content-Type': 'application/json',
-      };
-      const body = JSON.stringify(signUpItem);
-
-      const res = await fetch('http://localhost:4000/sign_up', {
-        method,
-        headers,
-        body,
-      });
-      console.log({ res });
-      return res;
-    };
-
-    f();
-  }, [signUpItem]);
+    dispatch(signUp(signUpItem));
+  }, [signUpItem, dispatch]);
 
   return { signUpItem, handleSignUpItemChange, submitSignUp };
 };

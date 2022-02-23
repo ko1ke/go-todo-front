@@ -1,8 +1,11 @@
 import type { NextPage } from 'next';
 import useSignIn from '../hooks/useSignIn';
+import { useSelector } from './../store';
+import { errorSelector } from '../selectors/auth';
 
 const SignIn: NextPage = () => {
   const { signInItem, handleSignInItemChange, submitSignIn } = useSignIn();
+  const error = useSelector(errorSelector);
 
   return (
     <>
@@ -31,6 +34,7 @@ const SignIn: NextPage = () => {
         <button type="submit" onClick={submitSignIn}>
           Submit
         </button>
+        {error && <p>{error.message}</p>}
       </div>
     </>
   );
