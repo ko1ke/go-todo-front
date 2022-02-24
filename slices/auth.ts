@@ -65,11 +65,67 @@ export const signIn = createAsyncThunk<Auth, SignInItem>(
   }
 );
 
+export const authUser = createAsyncThunk<Auth>(
+  'auth_user',
+  async (): Promise<Auth> => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    const method = 'POST';
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    };
+
+    const res = await fetch('http://localhost:4000/auth_user', {
+      method,
+      headers,
+    });
+
+    switch (res.status) {
+      case 200:
+        const auth = (await res.json()) as Auth;
+        return auth;
+      default:
+        throw new Error('auth user error');
+    }
+  }
+);
+
+export const refresh = createAsyncThunk<Auth>(
+  'refresh',
+  async (): Promise<Auth> => {
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    const method = 'POST';
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    const body = JSON.stringify({ refreshToken: refreshToken });
+
+    const res = await fetch('http://localhost:4000/refresh', {
+      method,
+      headers,
+      body,
+    });
+
+    switch (res.status) {
+      case 201:
+        const auth = (await res.json()) as Auth;
+        const { accessToken, refreshToken } = auth;
+        localStorage.setItem('accessToken', accessToken as string);
+        localStorage.setItem('refreshToken', refreshToken as string);
+        return auth;
+      default:
+        throw new Error('auth user error');
+    }
+  }
+);
+
 export const signOut = createAsyncThunk<Auth>(
   'sign_out',
   async (): Promise<Auth> => {
     const method = 'DELETE';
-    let accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
     const headers = {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
@@ -107,13 +163,18 @@ export const authSlice = createSlice({
     builder.addCase(signIn.rejected, (state, action) => {
       state.error = action.error;
     });
-    builder.addCase(signOut.fulfilled, (state, action) => {
+    builder.addCase(signOut.fulfilled, (state, _action) => {
       state.id = undefined;
       state.username = undefined;
       state.error = undefined;
     });
     builder.addCase(signOut.rejected, (state, action) => {
       state.error = action.error;
+    });
+    builder.addCase(authUser.fulfilled, (state, action) => {
+      state.id = action.payload.id;
+      state.username = action.payload.username;
+      state.error = undefined;
     });
   },
 });

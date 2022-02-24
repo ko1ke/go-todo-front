@@ -1,16 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
-import { useAuth } from '../hooks/useAuth';
 import { useSelector } from './../store';
 import { userNameSelector, idSelector } from '../selectors/auth';
 import useSignOut from '../hooks/useSignOut';
+import useAuthByToken from '../hooks/useAuthByToken';
 
 type Props = {
   children: React.ReactNode;
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
-  const { user, signOut } = useAuth();
+  useAuthByToken();
   const username = useSelector(userNameSelector);
   const id = useSelector(idSelector);
   const { submitSignOut } = useSignOut();
