@@ -63,20 +63,19 @@ export const useAuth = () => {
   }, []);
 
   const signOut = async () => {
-    const method = 'DELETE';
-    let accessToken = localStorage.getItem('accessToken');
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    };
-    const res = await fetch('http://localhost:4000/signout', {
-      method,
-      headers,
-    });
-
-    if (res.status === 200) {
-      alert('sign out successfully');
-    }
+    // const method = 'DELETE';
+    // let accessToken = localStorage.getItem('accessToken');
+    // const headers = {
+    //   'Content-Type': 'application/json',
+    //   Authorization: `Bearer ${accessToken}`,
+    // };
+    // const res = await fetch('http://localhost:4000/signout', {
+    //   method,
+    //   headers,
+    // });
+    // if (res.status === 200) {
+    //   alert('sign out successfully');
+    // }
   };
 
   return { user, authDoneRef, signOut };

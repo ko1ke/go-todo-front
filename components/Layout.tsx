@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useAuth } from '../hooks/useAuth';
 import { useSelector } from './../store';
 import { userNameSelector, idSelector } from '../selectors/auth';
+import useSignOut from '../hooks/useSignOut';
 
 type Props = {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   const { user, signOut } = useAuth();
   const username = useSelector(userNameSelector);
   const id = useSelector(idSelector);
+  const { submitSignOut } = useSignOut();
 
   return (
     <>
@@ -28,7 +30,7 @@ const Layout: React.FC<Props> = ({ children }) => {
           <a>sign in</a>
         </Link>
         <span> | </span>
-        <button onClick={signOut}>sign out</button>
+        <button onClick={submitSignOut}>sign out</button>
       </div>
       <p>{username && id && `ID: ${id} |  Name: ${username}`}</p>
       <hr />

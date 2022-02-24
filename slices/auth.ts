@@ -65,6 +65,32 @@ export const signIn = createAsyncThunk<Auth, SignInItem>(
   }
 );
 
+export const signOut = createAsyncThunk<Auth>(
+  'sign_out',
+  async (): Promise<Auth> => {
+    const method = 'DELETE';
+    let accessToken = localStorage.getItem('accessToken');
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const res = await fetch('http://localhost:4000/signout', {
+      method,
+      headers,
+    });
+
+    switch (res.status) {
+      case 200:
+        const auth = (await res.json()) as Auth;
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        return auth;
+      default:
+        throw new Error('unexpected error');
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -76,8 +102,17 @@ export const authSlice = createSlice({
     builder.addCase(signIn.fulfilled, (state, action) => {
       state.id = action.payload.id;
       state.username = action.payload.username;
+      state.error = undefined;
     });
     builder.addCase(signIn.rejected, (state, action) => {
+      state.error = action.error;
+    });
+    builder.addCase(signOut.fulfilled, (state, action) => {
+      state.id = undefined;
+      state.username = undefined;
+      state.error = undefined;
+    });
+    builder.addCase(signOut.rejected, (state, action) => {
       state.error = action.error;
     });
   },
