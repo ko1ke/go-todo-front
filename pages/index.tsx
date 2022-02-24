@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
-import { useAuth } from '../hooks/useAuth';
 import useTodos from '../hooks/useTodos';
 import Link from 'next/link';
+import { useSelector } from './../store';
+import { idSelector } from '../selectors/auth';
 
 const Todos: NextPage = () => {
-  const { user } = useAuth();
+  const id = useSelector(idSelector);
+
   const {
     todos,
     error,
@@ -28,12 +30,12 @@ const Todos: NextPage = () => {
             <p>Content: {todo.content}</p>
             <Link href={`/todos/${todo.id}`}>
               <a>
-                <button disabled={todo.userId !== user.id}>EDIT</button>
+                <button disabled={todo.userId !== id}>EDIT</button>
               </a>
             </Link>
             <span> </span>
             <button
-              disabled={todo.userId !== user.id}
+              disabled={todo.userId !== id}
               onClick={() => deleteTodo(todo.id)}
             >
               DELETE
@@ -43,7 +45,7 @@ const Todos: NextPage = () => {
         );
       })}
 
-      {user.id !== 0 && (
+      {id && (
         <>
           <p>Create Todo</p>
           <div>
