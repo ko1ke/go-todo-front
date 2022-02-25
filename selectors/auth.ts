@@ -11,6 +11,7 @@ export const idSelector = createSelector(authSelector, (auth) => {
 export const userNameSelector = createSelector(authSelector, (auth) => {
   return auth.username;
 });
+
 // /**
 //  * liffIdTokenを取得する
 //  * @returns liffIdToken
@@ -41,4 +42,8 @@ export const userNameSelector = createSelector(authSelector, (auth) => {
 //  */
 export const errorSelector = createSelector(authSelector, (auth) => {
   return auth.error;
+});
+
+export const hasTokenErrorSelector = createSelector(authSelector, (auth) => {
+  return auth.hasTokenError;
 });

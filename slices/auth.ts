@@ -5,6 +5,7 @@ const initialState: AuthState = {
   id: undefined,
   username: undefined,
   error: undefined,
+  hasTokenError: false,
 };
 
 export const signUp = createAsyncThunk<Auth, SignUpItem>(
@@ -70,6 +71,10 @@ export const authUser = createAsyncThunk<Auth>(
   async (): Promise<Auth> => {
     const accessToken = localStorage.getItem('accessToken');
 
+    if (!accessToken) {
+      return {};
+    }
+
     const method = 'POST';
     const headers = {
       'Content-Type': 'application/json',
@@ -96,6 +101,10 @@ export const refresh = createAsyncThunk<Auth>(
   async (): Promise<Auth> => {
     const refreshToken = localStorage.getItem('refreshToken');
 
+    if (!refreshToken) {
+      return {};
+    }
+
     const method = 'POST';
     const headers = {
       'Content-Type': 'application/json',
@@ -116,6 +125,8 @@ export const refresh = createAsyncThunk<Auth>(
         localStorage.setItem('refreshToken', refreshToken as string);
         return auth;
       default:
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         throw new Error('auth user error');
     }
   }
@@ -175,6 +186,21 @@ export const authSlice = createSlice({
       state.id = action.payload.id;
       state.username = action.payload.username;
       state.error = undefined;
+      state.hasTokenError = false;
+    });
+    builder.addCase(authUser.rejected, (state, _action) => {
+      state.error = undefined;
+      state.hasTokenError = true;
+    });
+    builder.addCase(refresh.fulfilled, (state, action) => {
+      state.id = action.payload.id;
+      state.username = action.payload.username;
+      state.error = undefined;
+      state.hasTokenError = false;
+    });
+    builder.addCase(refresh.rejected, (state, _action) => {
+      state.error = undefined;
+      state.hasTokenError = false;
     });
   },
 });

@@ -4,6 +4,7 @@ export type AuthState = {
   readonly id?: number;
   readonly username?: string;
   readonly error?: SerializedError;
+  readonly hasTokenError?: boolean;
 };
 
 export type Auth = {
