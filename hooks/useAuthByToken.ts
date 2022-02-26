@@ -7,10 +7,7 @@ import { hasTokenErrorSelector } from '../selectors/auth';
 const useAuthByToken = () => {
   const dispatch = useDispatch();
   const hasTokenError = useSelector(hasTokenErrorSelector);
-
-  useEffect(() => {
-    dispatch(authUser());
-  }, [dispatch]);
+  dispatch(authUser());
 
   useEffect(() => {
     if (hasTokenError === true) {
