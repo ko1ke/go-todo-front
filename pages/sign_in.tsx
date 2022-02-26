@@ -2,10 +2,11 @@ import type { NextPage } from 'next';
 import useSignIn from '../hooks/useSignIn';
 import { useSelector } from './../store';
 import { errorSelector } from '../selectors/auth';
-
+import useErrorToast from '../hooks/useErrorToast';
 const SignIn: NextPage = () => {
   const { signInItem, handleSignInItemChange, submitSignIn } = useSignIn();
   const error = useSelector(errorSelector);
+  useErrorToast();
 
   return (
     <>

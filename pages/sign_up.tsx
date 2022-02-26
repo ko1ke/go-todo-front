@@ -2,11 +2,13 @@ import type { NextPage } from 'next';
 import useSignUp from '../hooks/useSignUp';
 import { useSelector } from './../store';
 import { errorSelector } from '../selectors/auth';
+import useErrorToast from '../hooks/useErrorToast';
 
 const SignUp: NextPage = () => {
   const { signUpItem, handleSignUpItemChange, submitSignUp } = useSignUp();
   const error = useSelector(errorSelector);
-
+  useErrorToast();
+  
   return (
     <>
       <h1>Sign up</h1>
